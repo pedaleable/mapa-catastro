@@ -17,10 +17,12 @@ body { margin: 0; padding: 0; }
 	mapboxgl.accessToken = 'pk.eyJ1IjoiaWduYWNpb2FiZSIsImEiOiJsTDV0dWFJIn0.Og513NMky_08_sXUUDsrbA';
     const map = new mapboxgl.Map({
         container: 'map', // container ID
-        style: 'mapbox://styles/mapbox/streets-v11', // style URL
-        center: [-96, 37.8], // starting position
-        zoom: 3 // starting zoom
+        style: 'mapbox://styles/ignacioabe/cl31mvr88001914o1ukr5i1me', // style URL
+        center: [-70.602, -33.471], // starting position
+        zoom: 11 // starting zoom
     });
+
+    // 11.04-33.471,
 
     // Add geolocate control to the map.
     map.addControl(
