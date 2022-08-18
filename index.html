@@ -1,42 +1,146 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="utf-8">
-<title>Catastro</title>
-<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-<link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">
-<script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
-<style>
-body { margin: 0; padding: 0; }
-#map { position: absolute; top: 0; bottom: 0; width: 100%; }
-</style>
+    <meta charset="utf-8">
+    <title>Catastro</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <!--mapbox gl js-->
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.js"></script>
+    <!--google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:700i" rel="stylesheet">
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        a {
+            color: #d4d4d4;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        #header {
+            height: 40px;
+            background-color: #2e2e2e;
+        }
+
+        #header h1 {
+            font-weight: normal;
+            color: #da5329;
+            margin: 0px;
+            padding-left: 10px;
+            padding-top: 5px;
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        #map {
+            height: calc(100% - 40px);
+            position: relative;
+        }
+
+        #boton-leyenda {
+            position: absolute;
+            bottom: 40px;
+            right: 10px;
+            font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        }
+
+        .legend {
+            color: #a1a1a1;
+            background-color: #2e2e2e;
+            border: 1px solid #a1a1a1;
+            border-radius: 3px;
+            bottom: 70px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.10);
+            font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            padding: 10px;
+            position: absolute;
+            right: 10px;
+            z-index: 1;
+        }
+
+        .legend h4 {
+            margin: 0 0 10px;
+        }
+
+        .legend div span {
+            border-radius: 50%;
+            display: inline-block;
+            height: 10px;
+            margin-right: 5px;
+            width: 10px;
+        }
+    </style>
+
 </head>
+
 <body>
-<div id="map"></div>
-<script>
-	mapboxgl.accessToken = 'pk.eyJ1IjoiaWduYWNpb2FiZSIsImEiOiJsTDV0dWFJIn0.Og513NMky_08_sXUUDsrbA';
-    const map = new mapboxgl.Map({
-        container: 'map', // container ID
-        style: 'mapbox://styles/ignacioabe/cl31mvr88001914o1ukr5i1me', // style URL
-        center: [-70.602, -33.471], // starting position
-        zoom: 11 // starting zoom
-    });
 
-    // 11.04-33.471,
+    <div id="header">
+        <h1>catastro de ciclovías RM</h1>
+    </div>
 
-    // Add geolocate control to the map.
-    map.addControl(
-        new mapboxgl.GeolocateControl({
-            positionOptions: {
-                enableHighAccuracy: true
-            },
-            // When active the map will receive updates to the device's location as it changes.
-            trackUserLocation: true,
-            // Draw an arrow next to the location dot to indicate which direction the device is heading.
-            showUserHeading: true
-        })
-    );
-</script>
+    <div id="map"></div>
+
+    <button id="boton-leyenda" onclick="ocultaLeyenda()">VER/OCULTAR LEYENDA</button>
+
+    <div id='state-legend' class='legend'>
+        <h4>LEYENDA</h4>
+        <div><span style='background-color: #ff5722'></span>ciclovías por la vereda (+)</div>
+        <div><span style='background-color: #4caf50'></span>ciclovías segregadas por la calle (+)</div>
+        <div><span style='background-color: #ffeb3b'></span>ciclovías no segregadas por la calle (+)</div>
+        <div><span style='background-color: #29b6f6'></span>otra categoría (+)</div>
+        <div>
+            <p>
+                Fuente datos: <a href="https://www.openstreetmap.org/">colaboradores de OpenStreetMap</a><br>
+                Programado por: <a href="https://ignacioabe.cl">Ignacio Abé</a><br>
+                Para: <a href="https://pedaleable.org">pedaleable.org</a><br>
+                Última actualización: 2021-08-17
+            </p>
+        </div>
+    </div>
+
+    <script>
+
+        function ocultaLeyenda() {
+            var x = document.getElementById("state-legend");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+        }
+
+        mapboxgl.accessToken = 'pk.eyJ1IjoiaWduYWNpb2FiZSIsImEiOiJsTDV0dWFJIn0.Og513NMky_08_sXUUDsrbA';
+        const map = new mapboxgl.Map({
+            container: 'map', // container ID
+            style: 'mapbox://styles/ignacioabe/cl31mvr88001914o1ukr5i1me', // style URL
+            center: [-70.602, -33.471], // starting position
+            zoom: 11 // starting zoom
+        });
+
+        // 11.04-33.471,
+
+        // Add geolocate control to the map.
+        map.addControl(
+            new mapboxgl.GeolocateControl({
+                positionOptions: {
+                    enableHighAccuracy: true
+                },
+                // When active the map will receive updates to the device's location as it changes.
+                trackUserLocation: true,
+                // Draw an arrow next to the location dot to indicate which direction the device is heading.
+                showUserHeading: true
+            })
+        );
+    </script>
 
 </body>
+
 </html>
