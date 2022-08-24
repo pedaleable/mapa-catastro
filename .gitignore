@@ -1,3 +1,8 @@
+## Personalizados
+
+documentos/gestión/
+tmp/
+
 # Created by https://www.gitignore.io/api/osx,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=osx,visualstudiocode
 
@@ -41,7 +46,3 @@ Temporary Items
 .history
 
 # End of https://www.gitignore.io/api/osx,visualstudiocode
-
-## Personalizados
-# geodatos-osm/ Ignorar esta carpeta hace que el mapa no funcione, porque no encuentra las ciclovías...
-datos/
