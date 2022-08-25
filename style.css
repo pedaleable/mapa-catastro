@@ -38,6 +38,19 @@
     font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
   }
 
+  #boton-evaluación {
+    position: absolute;
+    bottom: 70px;
+    right: 10px;
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  }
+  #boton-emplazamiento {
+    position: absolute;
+    bottom: 100px;
+    right: 10px;
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  }
+
   .legend {
     color: #a1a1a1;
     background-color: #2e2e2e;

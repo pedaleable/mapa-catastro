@@ -63,15 +63,7 @@ map.on("load", () => {
         5
       ],
       "line-opacity": 0.75,
-      "line-color": [
-        "match",
-        ["get", "_emplazamiento"],
-        ["calzada"],
-        "#1976D2",
-        ["parque"],
-        "#388E3C",
-        "#D32F2F"
-      ]
+      "line-color": "#ff0000",
     }
   });
 
@@ -116,5 +108,32 @@ map.on("load", () => {
     map.getCanvas().style.cursor = '';
   });
 
-
 });
+
+function colorEvaluación() {
+  map.setPaintProperty('catastro-4kfr3c', 'line-color',
+    [
+      "interpolate",
+      ["linear"],
+      ["get", "_eval_estricta"],
+      0,
+      "hsl(0, 100%, 49%)",
+      1,
+      "hsl(230, 97%, 46%)"
+    ]
+  );
+};
+
+function colorEmplazamiento() {
+  map.setPaintProperty('catastro-4kfr3c', 'line-color',
+  [
+    "match",
+    ["get", "_emplazamiento"],
+    ["calzada"],
+    "#1976D2",
+    ["parque"],
+    "#388E3C",
+    "#D32F2F"
+  ]
+  );
+};
