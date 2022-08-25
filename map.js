@@ -82,6 +82,7 @@ map.on("load", () => {
   map.on('click', 'catastro-4kfr3c', (e) => {
     let nombre = e.features[0].properties.nombre;
     let longitud = e.features[0].properties.km;
+    let ancho = e.features[0].properties._ancho_cm
     let comuna = e.features[0].properties._comuna;
     let video = e.features[0].properties.video;
     // let ganancia_elev_neta = e.features[0].properties.ganancia_elev_neta;
@@ -93,8 +94,9 @@ map.on("load", () => {
       .setHTML(`
       <strong>EJE: ${nombre}</strong>
       <p>
-      COMUNA: ${comuna}
-      LONGITUD (km): ${longitud}
+      COMUNA: ${comuna}<br>
+      LONGITUD (km): ${longitud}<br>
+      ANCHO (cm): ${ancho}<br>
       VIDEO: <a href="${video}" target="_blank">VIDEO</a>
       </p>
       `
