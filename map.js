@@ -10,7 +10,7 @@ function ocultaLeyenda() {
 mapboxgl.accessToken = 'pk.eyJ1IjoiaWduYWNpb2FiZSIsImEiOiJsTDV0dWFJIn0.Og513NMky_08_sXUUDsrbA';
 const map = new mapboxgl.Map({
   container: 'map', // container ID
-  style: 'mapbox://styles/ignacioabe/ckvslac5d15mq15pbeyn3nsfi', // style URL
+  style: 'mapbox://styles/ignacioabe/cl7hqbqis002z15s0yv5kfp5w', // style URL
   center: [-70.602, -33.471], // starting position
   zoom: 11 // starting zoom
 });
@@ -113,27 +113,31 @@ map.on("load", () => {
 function colorEvaluación() {
   map.setPaintProperty('catastro-4kfr3c', 'line-color',
     [
-      "interpolate",
-      ["linear"],
-      ["get", "_eval_estricta"],
-      0,
-      "hsl(0, 100%, 49%)",
-      1,
-      "hsl(230, 97%, 46%)"
+      "match",
+      ["get", "_eval_graduada_pedal_clasif"],
+      ["buena"],
+      "#8BC34A",
+      ["regular"],
+      "#ffeb3b",
+      ["mala"],
+      "#ff9800",
+      ["muy mala"],
+      "#F44336",
+      "#000000"
     ]
   );
 };
 
 function colorEmplazamiento() {
   map.setPaintProperty('catastro-4kfr3c', 'line-color',
-  [
-    "match",
-    ["get", "_emplazamiento"],
-    ["calzada"],
-    "#1976D2",
-    ["parque"],
-    "#388E3C",
-    "#D32F2F"
-  ]
+    [
+      "match",
+      ["get", "_emplazamiento"],
+      ["calzada"],
+      "#29B6F6",
+      ["parque"],
+      "#9CCC65",
+      "#EF5350"
+    ]
   );
 };
