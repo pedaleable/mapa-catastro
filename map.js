@@ -63,7 +63,7 @@ map.on("load", () => {
         5
       ],
       "line-opacity": 0.75,
-      "line-color": "#ff0000",
+      "line-color": "#F44336",
     }
   });
 
@@ -126,6 +126,19 @@ function colorEvaluación() {
       "#000000"
     ]
   );
+
+  let leyendaEvaluacion = `
+  <h5>EVALUACIÓN</h5>
+  <div><span style='background-color: #8BC34A'></span>buena</div>
+  <div><span style='background-color: #ffeb3b'></span>regular</div>
+  <div><span style='background-color: #ff9800'></span>mala</div>
+  <div><span style='background-color: #F44336'></span>muy mala</div>
+  `
+
+  //cambia contenido de leyenda
+  document.getElementById("leyenda-contenidos").innerHTML = leyendaEvaluacion;
+
+
 };
 
 function colorEmplazamiento() {
@@ -140,4 +153,14 @@ function colorEmplazamiento() {
       "#EF5350"
     ]
   );
+
+  let leyendaEmplazamiento = `
+  <h5>EMPLAZAMIENTO</h5>
+  <div><span style='background-color: #29B6F6'></span>por la calle</div>
+  <div><span style='background-color: #9CCC65'></span>por un parque</div>
+  <div><span style='background-color: #EF5350'></span>por la acera u otro lugar</div>
+  `
+
+  //cambia contenido de leyenda
+  document.getElementById("leyenda-contenidos").innerHTML = leyendaEmplazamiento;
 };
