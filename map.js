@@ -164,3 +164,18 @@ function colorEmplazamiento() {
   //cambia contenido de leyenda
   document.getElementById("leyenda-contenidos").innerHTML = leyendaEmplazamiento;
 };
+
+document.getElementById("selector").onchange = changeListener;
+    
+function changeListener(){
+var value = this.value
+  console.log(value);
+  
+  if (value == "diseño"){
+    // document.body.style.background = "red";
+    colorEvaluación()
+  }else if (value == "emplazamiento"){
+    // document.body.style.background = "blue";
+    colorEmplazamiento()
+  }
+}

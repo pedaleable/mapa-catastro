@@ -23,9 +23,20 @@
 
     <div id="map"></div>
 
+<div id="botones">
+
+    
     <button id="boton-leyenda" onclick="ocultaLeyenda()">VER/OCULTAR LEYENDA</button>
-    <button id="boton-evaluación" onclick="colorEvaluación()">EVALUACIÓN</button>
-    <button id="boton-emplazamiento" onclick="colorEmplazamiento()">EMPLAZAMIENTO</button>
+    
+    <div id="selector-estilo">
+        <!-- <h>Would you like to see count values per hour or minute?</h><br> -->
+        <select id="selector">
+            <option value="" selected disabled="true">visualización</option>
+            <option value="diseño">diseño</option>
+            <option value="emplazamiento">emplazamiento</option>
+        </select>
+    </div>
+</div>
 
     <div id='state-legend' class='leyenda'>
         <h4>LEYENDA</h4>
@@ -37,7 +48,7 @@
                 Fuente datos: <a href="https://www.pedaleable.org/">pedaleable.org</a><br>
                 Programado por: <a href="https://ignacioabe.cl">Ignacio Abé</a><br>
                 <!-- Para: <a href="https://pedaleable.org">pedaleable.org</a><br> -->
-                Última actualización: 2021-08-17
+                Última actualización: 2022-09-06
             </p>
         </div>
     </div>
