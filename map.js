@@ -51,6 +51,7 @@ map.on("load", () => {
     "type": "line",
     "source": "tramos",
     "source-layer": "catastro-4kfr3c",
+    "filter": ["match", ["get", "_inválida"], ["1"], false, true],
     "layout": { "line-cap": "square", "line-join": "round" },
     "paint": {
       "line-width": [
@@ -71,10 +72,28 @@ map.on("load", () => {
   // When a click event occurs on a feature in the states layer,
   // open a popup at the location of the click, with description
   // HTML from the click event's properties.
+
+  //"nombre": "DEL INCA",
+  //"_comuna": "las condes",
+  //"km": 1.46,
+  //"_inválida": null,
+  //"_tipo": "unidireccional",
+  //"_emplazamiento": "calzada",
+  //"_localización": "izquierda",
+  //"_ancho_cm": 100,
+  //"_eval_estricta": 0,
+  //"_eval_graduada_pedal": 5,
+  //"_eval_graduada_pedal_quintil": 4,
+  //"_eval_graduada_pedal_clasif": "regular",
+  //"video": "https://youtu.be/YWcYQywmdjg"
+
+
   map.on('click', 'catastro-4kfr3c', (e) => {
     let nombre = e.features[0].properties.nombre;
     let longitud = e.features[0].properties.km;
-    let ancho = e.features[0].properties._ancho_cm
+    let direccionalidad = e.features[0].properties._tipo;
+    let emplazamiento = e.features[0].properties._emplazamiento;
+    let ancho = e.features[0].properties._ancho_cm;
     let comuna = e.features[0].properties._comuna;
     let video = e.features[0].properties.video;
     // let ganancia_elev_neta = e.features[0].properties.ganancia_elev_neta;
@@ -88,6 +107,8 @@ map.on("load", () => {
       <p>
       COMUNA: ${comuna}<br>
       LONGITUD (km): ${longitud}<br>
+      DIRECCIONALIDAD: ${direccionalidad}<br>
+      EMPLAZAMIENTO: ${emplazamiento}<br>
       ANCHO (cm): ${ancho}<br>
       VIDEO: <a href="${video}" target="_blank">VIDEO</a>
       </p>
