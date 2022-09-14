@@ -15,11 +15,10 @@ const map = new mapboxgl.Map({
   zoom: 11 // starting zoom
 });
 
-// 11.04-33.471,
 
 //controles
 
-// Add zoom and rotation controls to the map.
+// zoom y rotación
 map.addControl(new mapboxgl.NavigationControl(), "top-left");
 
 //pantalla completa
@@ -68,26 +67,6 @@ map.on("load", () => {
     }
   });
 
-  //interactividad capa líneas
-  // When a click event occurs on a feature in the states layer,
-  // open a popup at the location of the click, with description
-  // HTML from the click event's properties.
-
-  //"nombre": "DEL INCA",
-  //"_comuna": "las condes",
-  //"km": 1.46,
-  //"_inválida": null,
-  //"_tipo": "unidireccional",
-  //"_emplazamiento": "calzada",
-  //"_localización": "izquierda",
-  //"_ancho_cm": 100,
-  //"_eval_estricta": 0,
-  //"_eval_graduada_pedal": 5,
-  //"_eval_graduada_pedal_quintil": 4,
-  //"_eval_graduada_pedal_clasif": "regular",
-  //"video": "https://youtu.be/YWcYQywmdjg"
-
-
   map.on('click', 'catastro-4kfr3c', (e) => {
     let nombre = e.features[0].properties.nombre;
     let longitud = e.features[0].properties.km;
@@ -96,9 +75,6 @@ map.on("load", () => {
     let ancho = e.features[0].properties._ancho_cm;
     let comuna = e.features[0].properties._comuna;
     let videoID = e.features[0].properties.video_id;
-    // let ganancia_elev_neta = e.features[0].properties.ganancia_elev_neta;
-    // let altura_inicial = e.features[0].properties.altura_inicial;
-    // let altura_final = e.features[0].properties.altura_final;
 
     new mapboxgl.Popup()
       .setLngLat(e.lngLat)
@@ -114,7 +90,7 @@ map.on("load", () => {
       <div class="contenedor-youtube"
       allowfullscreen>
         <iframe id="ytplayer" type="text/html" width="100%" height="100%"
-        src="http://www.youtube.com/embed/${videoID}?autoplay=0"
+        src="https://www.youtube.com/embed/${videoID}?autoplay=0"
         frameborder="0"
         allowfullscreen
         />
@@ -137,9 +113,25 @@ map.on("load", () => {
     map.getCanvas().style.cursor = '';
   });
 
+colorSimple()
+
 });
 
-function colorEvaluación() {
+
+function colorSimple() {
+  map.setPaintProperty('catastro-4kfr3c', 'line-color', "#F44336");
+
+  let leyendaSimple = `
+  <h5>SIMPLE</h5>
+  <div><span style='background-color: #F44336'></span>ciclovías</div>
+  `
+
+  //cambia contenido de leyenda
+  document.getElementById("leyenda-contenidos").innerHTML = leyendaSimple;
+};
+
+
+function colorNorma() {
   map.setPaintProperty('catastro-4kfr3c', 'line-color',
     [
       "match",
@@ -156,17 +148,16 @@ function colorEvaluación() {
     ]
   );
 
-  let leyendaEvaluacion = `
-  <h5>EVALUACIÓN</h5>
-  <div><span style='background-color: #8BC34A'></span>buena</div>
-  <div><span style='background-color: #ffeb3b'></span>regular</div>
-  <div><span style='background-color: #ff9800'></span>mala</div>
-  <div><span style='background-color: #F44336'></span>muy mala</div>
+  let leyendaNormas = `
+  <h5>CUMPLIMIENTO NORMAS DE DISEÑO</h5>
+  <div><span style='background-color: #8BC34A'></span>alto</div>
+  <div><span style='background-color: #ffeb3b'></span>medio</div>
+  <div><span style='background-color: #ff9800'></span>bajo</div>
+  <div><span style='background-color: #F44336'></span>muy bajo</div>
   `
 
   //cambia contenido de leyenda
-  document.getElementById("leyenda-contenidos").innerHTML = leyendaEvaluacion;
-
+  document.getElementById("leyenda-contenidos").innerHTML = leyendaNormas;
 
 };
 
@@ -195,14 +186,17 @@ function colorEmplazamiento() {
 };
 
 document.getElementById("selector").onchange = changeListener;
-    
+ 
 function changeListener(){
 var value = this.value
   console.log(value);
   
-  if (value == "diseño"){
+  if (value == "simple"){
     // document.body.style.background = "red";
-    colorEvaluación()
+    colorSimple()
+  }else if (value == "normas"){
+    // document.body.style.background = "red";
+    colorNorma()
   }else if (value == "emplazamiento"){
     // document.body.style.background = "blue";
     colorEmplazamiento()
