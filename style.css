@@ -84,3 +84,14 @@
     margin-right: 5px;
     width: 10px;
   }
+
+  .mapboxgl-popup {
+    width: 400px;
+    max-width: 400px;
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    }
+
+  .contenedor-youtube {
+    width: 100%;
+    aspect-ratio: 1/1;
+  }

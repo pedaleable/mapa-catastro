@@ -95,13 +95,14 @@ map.on("load", () => {
     let emplazamiento = e.features[0].properties._emplazamiento;
     let ancho = e.features[0].properties._ancho_cm;
     let comuna = e.features[0].properties._comuna;
-    let video = e.features[0].properties.video;
+    let videoID = e.features[0].properties.video_id;
     // let ganancia_elev_neta = e.features[0].properties.ganancia_elev_neta;
     // let altura_inicial = e.features[0].properties.altura_inicial;
     // let altura_final = e.features[0].properties.altura_final;
 
     new mapboxgl.Popup()
       .setLngLat(e.lngLat)
+      .setMaxWidth("300px")
       .setHTML(`
       <strong>EJE: ${nombre}</strong>
       <p>
@@ -110,7 +111,14 @@ map.on("load", () => {
       DIRECCIONALIDAD: ${direccionalidad}<br>
       EMPLAZAMIENTO: ${emplazamiento}<br>
       ANCHO (cm): ${ancho}<br>
-      VIDEO: <a href="${video}" target="_blank">VIDEO</a>
+      <div class="contenedor-youtube"
+      allowfullscreen>
+        <iframe id="ytplayer" type="text/html" width="100%" height="100%"
+        src="http://www.youtube.com/embed/${videoID}?autoplay=0"
+        frameborder="0"
+        allowfullscreen
+        />
+      </div>
       </p>
       `
       )
