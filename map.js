@@ -90,7 +90,7 @@ map.on("load", () => {
       <div class="contenedor-youtube"
       allowfullscreen>
         <iframe id="ytplayer" type="text/html" width="100%" height="100%"
-        src="https://www.youtube.com/embed/${videoID}?autoplay=0"
+        src="https://www.youtube.com/embed/${videoID}?autoplay=0&origin=http://ignacioabe.cl"
         frameborder="0"
         allowfullscreen
         />
