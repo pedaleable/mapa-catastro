@@ -87,14 +87,6 @@ map.on("load", () => {
       DIRECCIONALIDAD: ${direccionalidad}<br>
       EMPLAZAMIENTO: ${emplazamiento}<br>
       ANCHO (cm): ${ancho}<br>
-      <div class="contenedor-youtube"
-      allowfullscreen>
-        <iframe id="ytplayer" type="text/html" width="100%" height="100%"
-        src="https://www.youtube.com/embed/${videoID}?autoplay=0&origin=http://ignacioabe.cl"
-        frameborder="0"
-        allowfullscreen
-        />
-      </div>
       </p>
       `
       )
@@ -113,7 +105,7 @@ map.on("load", () => {
     map.getCanvas().style.cursor = '';
   });
 
-colorSimple()
+  colorSimple()
 
 });
 
@@ -186,18 +178,18 @@ function colorEmplazamiento() {
 };
 
 document.getElementById("selector").onchange = changeListener;
- 
-function changeListener(){
-var value = this.value
+
+function changeListener() {
+  var value = this.value
   console.log(value);
-  
-  if (value == "simple"){
+
+  if (value == "simple") {
     // document.body.style.background = "red";
     colorSimple()
-  }else if (value == "normas"){
+  } else if (value == "normas") {
     // document.body.style.background = "red";
     colorNorma()
-  }else if (value == "emplazamiento"){
+  } else if (value == "emplazamiento") {
     // document.body.style.background = "blue";
     colorEmplazamiento()
   }
