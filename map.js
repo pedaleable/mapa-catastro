@@ -119,11 +119,11 @@ colorSimple()
 
 
 function colorSimple() {
-  map.setPaintProperty('catastro-4kfr3c', 'line-color', "#F44336");
+  map.setPaintProperty('catastro-4kfr3c', 'line-color', "#EF6C00");
 
   let leyendaSimple = `
   <h5>SIMPLE</h5>
-  <div><span style='background-color: #F44336'></span>ciclovías</div>
+  <div><span style='background-color: #EF6C00'></span>ciclovías</div>
   `
 
   //cambia contenido de leyenda
