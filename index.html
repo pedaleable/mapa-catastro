@@ -6,8 +6,8 @@
     <title>Catastro</title>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
     <!--mapbox gl js-->
-    <link href="https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.css" rel="stylesheet">
-    <script src="https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.js"></script>
     <!--google fonts-->
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
     <!-- css interno -->
@@ -34,7 +34,10 @@
             <option value="simple" selected>simple</option>
             <option value="normas">cumplimiento normas</option>
             <option value="emplazamiento" >emplazamiento</option>
-        </select> 
+        </select>
+        <h2>Selector eval</h2>
+        <label id="evaluación"></label>
+        <input id="slider" type="range" min="1" max="5" step="1" value="1">
     </div>
 </div>
 

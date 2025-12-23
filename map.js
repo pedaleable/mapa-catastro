@@ -34,13 +34,23 @@ let geoloc = new mapboxgl.GeolocateControl({
 
 map.addControl(geoloc, "top-left");
 
+//Añade un filtro según atributo numérico
+const evaluaciones = [1, 2, 3, 4, 5]
+
+function filterBy(evaluación) {
+  const filters = ["==", ["get", "_eval_graduada_pedal_quintil"], evaluación];
+  map.setFilter("catastro-4kfr3c", filters);
+}
+
+document.getElementById("evaluación").textContent = evaluaciones[evaluación];
+
 //capas externas
 map.on("load", () => {
 
   //añade fuente tramos
   map.addSource("tramos", {
     "type": "vector",
-    "url": "mapbox://ignacioabe.cldezmae"
+    "url": "mapbox://ignacioabe.cldezmae",
   })
 
 
@@ -113,7 +123,9 @@ map.on("load", () => {
     map.getCanvas().style.cursor = '';
   });
 
-colorSimple()
+  colorSimple(); // Asegúrate de que se aplique el estilo inicial
+  filterBy(1); // Aplica el filtro inicial basado en el valor inicial del slider
+  document.getElementById("evaluación").textContent = 1; // Sincroniza el texto inicial con el slider
 
 });
 
@@ -124,11 +136,20 @@ function colorSimple() {
   let leyendaSimple = `
   <h5>SIMPLE</h5>
   <div><span style='background-color: #EF6C00'></span>ciclovías</div>
-  `
+  `;
 
   //cambia contenido de leyenda
   document.getElementById("leyenda-contenidos").innerHTML = leyendaSimple;
-};
+
+  // Set filter to first month of the year
+  filterBy(1);
+
+  document.getElementById('slider').addEventListener('input', (e) => {
+    const evaluación = parseInt(e.target.value, 10);
+    filterBy(evaluación);
+    document.getElementById("evaluación").textContent = evaluación; // Actualiza el texto al cambiar el slider
+  });
+}
 
 
 function colorNorma() {
