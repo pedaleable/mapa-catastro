@@ -38,18 +38,18 @@ map.addControl(geoloc, "top-left");
 map.on("load", () => {
 
   //añade fuente tramos
-  map.addSource("tramos", {
+  map.addSource("fuente-catastro", {
     "type": "vector",
-    "url": "mapbox://ignacioabe.cldezmae"
+    "url": "mapbox://ignacioabe.zmyl1irb45n6"
   })
 
 
   // añade capa tramos
   map.addLayer({
-    "id": "catastro-4kfr3c",
+    "id": "capa-tramos",
     "type": "line",
-    "source": "tramos",
-    "source-layer": "catastro-4kfr3c",
+    "source": "fuente-catastro",
+    "source-layer": "tramos",
     "filter": ["match", ["get", "_inválida"], ["1"], false, true],
     "layout": { "line-cap": "square", "line-join": "round" },
     "paint": {
@@ -67,7 +67,7 @@ map.on("load", () => {
     }
   });
 
-  map.on('click', 'catastro-4kfr3c', (e) => {
+  map.on('click', 'capa-tramos', (e) => {
     let nombre = e.features[0].properties.nombre;
     let longitud = e.features[0].properties.km;
     let direccionalidad = e.features[0].properties._tipo;
@@ -103,13 +103,13 @@ map.on("load", () => {
 
   // Change the cursor to a pointer when
   // the mouse is over the states layer.
-  map.on('mouseenter', 'catastro-4kfr3c', () => {
+  map.on('mouseenter', 'capa-tramos', () => {
     map.getCanvas().style.cursor = 'pointer';
   });
 
   // Change the cursor back to a pointer
   // when it leaves the states layer.
-  map.on('mouseleave', 'catastro-4kfr3c', () => {
+  map.on('mouseleave', 'capa-tramos', () => {
     map.getCanvas().style.cursor = '';
   });
 
@@ -119,7 +119,7 @@ map.on("load", () => {
 
 
 function colorSimple() {
-  map.setPaintProperty('catastro-4kfr3c', 'line-color', "#EF6C00");
+  map.setPaintProperty('capa-tramos', 'line-color', "#EF6C00");
 
   let leyendaSimple = `
   <h5>SIMPLE</h5>
@@ -132,7 +132,7 @@ function colorSimple() {
 
 
 function colorNorma() {
-  map.setPaintProperty('catastro-4kfr3c', 'line-color',
+  map.setPaintProperty('capa-tramos', 'line-color',
     [
       "match",
       ["get", "_eval_graduada_pedal_clasif"],
@@ -162,7 +162,7 @@ function colorNorma() {
 };
 
 function colorEmplazamiento() {
-  map.setPaintProperty('catastro-4kfr3c', 'line-color',
+  map.setPaintProperty('capa-tramos', 'line-color',
     [
       "match",
       ["get", "_emplazamiento"],
