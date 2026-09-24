@@ -21,32 +21,75 @@
         <h1>catastro de ciclovías RM</h1>
     </div> -->
 
-    <div id="map"></div>
-
-<div id="botones">
-
-    
-    <button id="boton-leyenda" onclick="ocultaLeyenda()">VER/OCULTAR LEYENDA</button>
-    <h4 class="flotante">visualización</h4>
-    <div id="selector-estilo">
-        <!-- <h>Would you like to see count values per hour or minute?</h><br> -->
-        <select id="selector">
-            <option value="simple" selected>simple</option>
-            <option value="normas">cumplimiento normas</option>
-            <option value="emplazamiento" >emplazamiento</option>
-        </select>
-        <h2>Selector eval</h2>
-        <label id="evaluación"></label>
-        <input id="slider" type="range" min="1" max="5" step="1" value="1">
+    <div id="map" class="mapboxgl-map">
+        <div class="mapboxgl-canary" style="visibility: hidden;"></div>
+        <div class="mapboxgl-canvas-container mapboxgl-interactive mapboxgl-touch-drag-pan mapboxgl-touch-zoom-rotate">
+            <canvas class="mapboxgl-canvas" tabindex="0" aria-label="Map" role="region" width="1594" height="1010"
+                style="width: 1594px; height: 1010px;"></canvas>
+        </div>
+        <div class="mapboxgl-control-container">
+            <div class="mapboxgl-ctrl-top-left">
+                <div class="mapboxgl-ctrl mapboxgl-ctrl-group"><button class="mapboxgl-ctrl-zoom-in" type="button"
+                        aria-label="Zoom in" aria-disabled="false"><span class="mapboxgl-ctrl-icon" aria-hidden="true"
+                            title="Zoom in"></span></button><button class="mapboxgl-ctrl-zoom-out" type="button"
+                        aria-label="Zoom out" aria-disabled="false"><span class="mapboxgl-ctrl-icon" aria-hidden="true"
+                            title="Zoom out"></span></button><button class="mapboxgl-ctrl-compass" type="button"
+                        aria-label="Reset bearing to north"><span class="mapboxgl-ctrl-icon" aria-hidden="true"
+                            title="Reset bearing to north" style="transform: rotate(0deg);"></span></button></div>
+                <div class="mapboxgl-ctrl mapboxgl-ctrl-group"><button class="mapboxgl-ctrl-fullscreen" type="button"
+                        aria-label="Enter fullscreen"><span class="mapboxgl-ctrl-icon" aria-hidden="true"
+                            title="Enter fullscreen"></span></button></div>
+                <div class="mapboxgl-ctrl mapboxgl-ctrl-group"><button class="mapboxgl-ctrl-geolocate" type="button"
+                        aria-label="Find my location" aria-pressed="false"><span class="mapboxgl-ctrl-icon"
+                            aria-hidden="true" title="Find my location"></span></button></div>
+            </div>
+            <div class="mapboxgl-ctrl-top-right"></div>
+            <div class="mapboxgl-ctrl-bottom-left">
+                <div class="mapboxgl-ctrl" style="display: block;"><a class="mapboxgl-ctrl-logo" target="_blank"
+                        rel="noopener nofollow" href="https://www.mapbox.com/" aria-label="Mapbox logo"></a></div>
+            </div>
+            <div class="mapboxgl-ctrl-bottom-right">
+                <div class="mapboxgl-ctrl mapboxgl-ctrl-attrib"><button class="mapboxgl-ctrl-attrib-button"
+                        type="button" aria-label="Toggle attribution"><span class="mapboxgl-ctrl-icon"
+                            aria-hidden="true" title="Toggle attribution"></span></button>
+                    <div class="mapboxgl-ctrl-attrib-inner" role="list"><a href="https://www.mapbox.com/about/maps"
+                            target="_blank" title="Mapbox" aria-label="Mapbox">© Mapbox</a> <a
+                            href="https://www.openstreetmap.org/copyright/" target="_blank" title="OpenStreetMap"
+                            aria-label="OpenStreetMap">© OpenStreetMap</a> <a class="mapbox-improve-map"
+                            href="https://apps.mapbox.com/feedback/?owner=ignacioabe&amp;id=cl7hqbqis002z15s0yv5kfp5w&amp;access_token=pk.eyJ1IjoiaWduYWNpb2FiZSIsImEiOiJsTDV0dWFJIn0.Og513NMky_08_sXUUDsrbA"
+                            target="_blank" aria-label="Map feedback" rel="noopener nofollow">Improve this map</a></div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 
-    <div id='state-legend' class='leyenda'>
+    <div id="botones">
+
+
+        <button id="boton-leyenda" onclick="ocultaLeyenda()">VER/OCULTAR LEYENDA</button>
+        <h4 class="flotante">visualización</h4>
+        <div id="selector-estilo">
+            <!-- <h>Would you like to see count values per hour or minute?</h><br> -->
+            <select id="selector">
+                <option value="simple" selected="selected">simple</option>
+                <option value="normas">cumplimiento normas</option>
+                <option value="emplazamiento">emplazamiento</option>
+            </select>
+        </div>
+    </div>
+
+    <div id="state-legend" class="leyenda">
         <h4>LEYENDA</h4>
-        <div id="leyenda-contenidos"></div>
+        <div id="leyenda-contenidos">
+            <h5>SIMPLE</h5>
+            <div><span style="background-color: #EF6C00"></span>ciclovías</div>
+        </div>
         <div id="leyenda-creditos">
             <p>
-                Este mapa es un proyecto de <a href="https://pedaleable.org">Pedaleable.org</a>, y ha sido creado a partir de un recorrido exhaustivo de la red de ciclovías de Santiago, registrando los principales parámetros de diseño y un video en 360 grados para cada eje. Contó con el apoyo de Specialized y Garmin. Para más información <a href="https://www.pedaleable.org/2022/09/21/mapa/">haz click aquí.</a>
+                Este mapa es un proyecto de <a href="https://pedaleable.org/">Pedaleable.org</a>, y ha sido creado a
+                partir de un recorrido exhaustivo de la red de ciclovías de Santiago, registrando los principales
+                parámetros de diseño y un video en 360 grados para cada eje. Contó con el apoyo de Specialized y Garmin.
+                Para más información <a href="https://www.pedaleable.org/2022/09/21/mapa/">haz click aquí.</a>
             </p>
         </div>
     </div>

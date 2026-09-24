@@ -34,31 +34,21 @@ let geoloc = new mapboxgl.GeolocateControl({
 
 map.addControl(geoloc, "top-left");
 
-//Añade un filtro según atributo numérico
-const evaluaciones = [1, 2, 3, 4, 5]
-
-function filterBy(evaluación) {
-  const filters = ["==", ["get", "_eval_graduada_pedal_quintil"], evaluación];
-  map.setFilter("tramos", filters);
-}
-
-document.getElementById("evaluación").textContent = evaluaciones[evaluación];
-
 //capas externas
 map.on("load", () => {
 
   //añade fuente tramos
-  map.addSource("catastro-2021", {
+  map.addSource("tramos", {
     "type": "vector",
-    "url": "mapbox://ignacioabe.cldezmae",
+    "url": "mapbox://ignacioabe.cldezmae"
   })
 
 
   // añade capa tramos
   map.addLayer({
-    "id": "tramos",
+    "id": "catastro-4kfr3c",
     "type": "line",
-    "source": "catastro-2021",
+    "source": "tramos",
     "source-layer": "catastro-4kfr3c",
     "filter": ["match", ["get", "_inválida"], ["1"], false, true],
     "layout": { "line-cap": "square", "line-join": "round" },
@@ -77,7 +67,7 @@ map.on("load", () => {
     }
   });
 
-  map.on('click', 'tramos', (e) => {
+  map.on('click', 'catastro-4kfr3c', (e) => {
     let nombre = e.features[0].properties.nombre;
     let longitud = e.features[0].properties.km;
     let direccionalidad = e.features[0].properties._tipo;
@@ -113,47 +103,36 @@ map.on("load", () => {
 
   // Change the cursor to a pointer when
   // the mouse is over the states layer.
-  map.on('mouseenter', 'tramos', () => {
+  map.on('mouseenter', 'catastro-4kfr3c', () => {
     map.getCanvas().style.cursor = 'pointer';
   });
 
   // Change the cursor back to a pointer
   // when it leaves the states layer.
-  map.on('mouseleave', 'tramos', () => {
+  map.on('mouseleave', 'catastro-4kfr3c', () => {
     map.getCanvas().style.cursor = '';
   });
 
-  colorSimple(); // Asegúrate de que se aplique el estilo inicial
-  // filterBy(1); // Aplica el filtro inicial basado en el valor inicial del slider
-  // document.getElementById("evaluación").textContent = 1; // Sincroniza el texto inicial con el slider
+  colorSimple()
 
 });
 
 
 function colorSimple() {
-  map.setPaintProperty('tramos', 'line-color', "#EF6C00");
+  map.setPaintProperty('catastro-4kfr3c', 'line-color', "#EF6C00");
 
   let leyendaSimple = `
   <h5>SIMPLE</h5>
   <div><span style='background-color: #EF6C00'></span>ciclovías</div>
-  `;
+  `
 
   //cambia contenido de leyenda
   document.getElementById("leyenda-contenidos").innerHTML = leyendaSimple;
-
-  // Set filter to first month of the year
-  filterBy(1);
-
-//   document.getElementById('slider').addEventListener('input', (e) => {
-//     const evaluación = parseInt(e.target.value, 10);
-//     filterBy(evaluación);
-//     document.getElementById("evaluación").textContent = evaluación; // Actualiza el texto al cambiar el slider
-//   });
-// }
+};
 
 
 function colorNorma() {
-  map.setPaintProperty('tramos', 'line-color',
+  map.setPaintProperty('catastro-4kfr3c', 'line-color',
     [
       "match",
       ["get", "_eval_graduada_pedal_clasif"],
@@ -183,7 +162,7 @@ function colorNorma() {
 };
 
 function colorEmplazamiento() {
-  map.setPaintProperty('tramos', 'line-color',
+  map.setPaintProperty('catastro-4kfr3c', 'line-color',
     [
       "match",
       ["get", "_emplazamiento"],
@@ -207,18 +186,18 @@ function colorEmplazamiento() {
 };
 
 document.getElementById("selector").onchange = changeListener;
- 
-function changeListener(){
-var value = this.value
+
+function changeListener() {
+  var value = this.value
   console.log(value);
-  
-  if (value == "simple"){
+
+  if (value == "simple") {
     // document.body.style.background = "red";
     colorSimple()
-  }else if (value == "normas"){
+  } else if (value == "normas") {
     // document.body.style.background = "red";
     colorNorma()
-  }else if (value == "emplazamiento"){
+  } else if (value == "emplazamiento") {
     // document.body.style.background = "blue";
     colorEmplazamiento()
   }
