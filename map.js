@@ -39,7 +39,7 @@ const evaluaciones = [1, 2, 3, 4, 5]
 
 function filterBy(evaluación) {
   const filters = ["==", ["get", "_eval_graduada_pedal_quintil"], evaluación];
-  map.setFilter("catastro-4kfr3c", filters);
+  map.setFilter("tramos", filters);
 }
 
 document.getElementById("evaluación").textContent = evaluaciones[evaluación];
@@ -48,7 +48,7 @@ document.getElementById("evaluación").textContent = evaluaciones[evaluación];
 map.on("load", () => {
 
   //añade fuente tramos
-  map.addSource("tramos", {
+  map.addSource("catastro-2021", {
     "type": "vector",
     "url": "mapbox://ignacioabe.cldezmae",
   })
@@ -56,9 +56,9 @@ map.on("load", () => {
 
   // añade capa tramos
   map.addLayer({
-    "id": "catastro-4kfr3c",
+    "id": "tramos",
     "type": "line",
-    "source": "tramos",
+    "source": "catastro-2021",
     "source-layer": "catastro-4kfr3c",
     "filter": ["match", ["get", "_inválida"], ["1"], false, true],
     "layout": { "line-cap": "square", "line-join": "round" },
@@ -77,7 +77,7 @@ map.on("load", () => {
     }
   });
 
-  map.on('click', 'catastro-4kfr3c', (e) => {
+  map.on('click', 'tramos', (e) => {
     let nombre = e.features[0].properties.nombre;
     let longitud = e.features[0].properties.km;
     let direccionalidad = e.features[0].properties._tipo;
@@ -113,25 +113,25 @@ map.on("load", () => {
 
   // Change the cursor to a pointer when
   // the mouse is over the states layer.
-  map.on('mouseenter', 'catastro-4kfr3c', () => {
+  map.on('mouseenter', 'tramos', () => {
     map.getCanvas().style.cursor = 'pointer';
   });
 
   // Change the cursor back to a pointer
   // when it leaves the states layer.
-  map.on('mouseleave', 'catastro-4kfr3c', () => {
+  map.on('mouseleave', 'tramos', () => {
     map.getCanvas().style.cursor = '';
   });
 
   colorSimple(); // Asegúrate de que se aplique el estilo inicial
-  filterBy(1); // Aplica el filtro inicial basado en el valor inicial del slider
-  document.getElementById("evaluación").textContent = 1; // Sincroniza el texto inicial con el slider
+  // filterBy(1); // Aplica el filtro inicial basado en el valor inicial del slider
+  // document.getElementById("evaluación").textContent = 1; // Sincroniza el texto inicial con el slider
 
 });
 
 
 function colorSimple() {
-  map.setPaintProperty('catastro-4kfr3c', 'line-color', "#EF6C00");
+  map.setPaintProperty('tramos', 'line-color', "#EF6C00");
 
   let leyendaSimple = `
   <h5>SIMPLE</h5>
@@ -144,16 +144,16 @@ function colorSimple() {
   // Set filter to first month of the year
   filterBy(1);
 
-  document.getElementById('slider').addEventListener('input', (e) => {
-    const evaluación = parseInt(e.target.value, 10);
-    filterBy(evaluación);
-    document.getElementById("evaluación").textContent = evaluación; // Actualiza el texto al cambiar el slider
-  });
-}
+//   document.getElementById('slider').addEventListener('input', (e) => {
+//     const evaluación = parseInt(e.target.value, 10);
+//     filterBy(evaluación);
+//     document.getElementById("evaluación").textContent = evaluación; // Actualiza el texto al cambiar el slider
+//   });
+// }
 
 
 function colorNorma() {
-  map.setPaintProperty('catastro-4kfr3c', 'line-color',
+  map.setPaintProperty('tramos', 'line-color',
     [
       "match",
       ["get", "_eval_graduada_pedal_clasif"],
@@ -183,7 +183,7 @@ function colorNorma() {
 };
 
 function colorEmplazamiento() {
-  map.setPaintProperty('catastro-4kfr3c', 'line-color',
+  map.setPaintProperty('tramos', 'line-color',
     [
       "match",
       ["get", "_emplazamiento"],
