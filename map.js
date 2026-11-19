@@ -40,7 +40,7 @@ map.on("load", () => {
   //añade fuente tramos
   map.addSource("fuente-catastro", {
     "type": "vector",
-    "url": "mapbox://ignacioabe.zmyl1irb45n6"
+    "url": "mapbox://ignacioabe.x01u2ew8owtw"
   })
 
 
