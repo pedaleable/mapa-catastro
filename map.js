@@ -1,3 +1,6 @@
+import * as maplibregl from 'https://unpkg.com/maplibre-gl@6.19.0/dist/maplibre-gl.mjs';
+
+
 function ocultaLeyenda() {
   var x = document.getElementById("state-legend");
   if (x.style.display === "none") {
@@ -7,10 +10,9 @@ function ocultaLeyenda() {
   }
 }
 
-mapboxgl.accessToken = 'pk.eyJ1IjoiaWduYWNpb2FiZSIsImEiOiJsTDV0dWFJIn0.Og513NMky_08_sXUUDsrbA';
-const map = new mapboxgl.Map({
+const map = new maplibregl.Map({
   container: 'map', // container ID
-  style: 'mapbox://styles/ignacioabe/cl7hqbqis002z15s0yv5kfp5w', // style URL
+  style: 'https://tiles.openfreemap.org/styles/positron', // style URL
   center: [-70.602, -33.471], // starting position
   zoom: 11 // starting zoom
 });
@@ -19,13 +21,13 @@ const map = new mapboxgl.Map({
 //controles
 
 // zoom y rotación
-map.addControl(new mapboxgl.NavigationControl(), "top-left");
+map.addControl(new maplibregl.NavigationControl(), "top-left");
 
 //pantalla completa
-map.addControl(new mapboxgl.FullscreenControl(), "top-left");
+map.addControl(new maplibregl.FullscreenControl(), "top-left");
 
 //geolocalización
-let geoloc = new mapboxgl.GeolocateControl({
+let geoloc = new maplibregl.GeolocateControl({
   positionOptions: {
     enableHighAccuracy: true
   },
@@ -38,10 +40,10 @@ map.addControl(geoloc, "top-left");
 map.on("load", () => {
 
   //añade fuente tramos
-  map.addSource("fuente-catastro", {
-    "type": "vector",
-    "url": "mapbox://ignacioabe.x01u2ew8owtw"
-  })
+  map.addSource('fuente-catastro', {
+    'type': 'geojson',
+    'data': 'datos/catastro.geojson',
+  });
 
 
   // añade capa tramos
@@ -49,7 +51,7 @@ map.on("load", () => {
     "id": "capa-tramos",
     "type": "line",
     "source": "fuente-catastro",
-    "source-layer": "tramos",
+    // "source-layer": "tramos",
     "filter": ["match", ["get", "_inválida"], ["1"], false, true],
     "layout": { "line-cap": "square", "line-join": "round" },
     "paint": {
@@ -67,88 +69,79 @@ map.on("load", () => {
     }
   });
 
+  // popup al hacer clic en un tramo
   map.on('click', 'capa-tramos', (e) => {
-    let nombre = e.features[0].properties.nombre;
-    let longitud = e.features[0].properties.km;
-    let direccionalidad = e.features[0].properties._tipo;
-    let emplazamiento = e.features[0].properties._emplazamiento;
-    let ancho = e.features[0].properties._ancho_cm;
-    let comuna = e.features[0].properties._comuna;
-    let videoID = e.features[0].properties.video_id;
+    const p = e.features[0].properties;
 
-    new mapboxgl.Popup()
+    const html = `
+  <strong>EJE: ${p.nombre}</strong>
+  <p>
+    COMUNA: ${p._comuna}<br>
+    LONGITUD (km): ${p.km}<br>
+    DIRECCIONALIDAD: ${p._tipo}<br>
+    EMPLAZAMIENTO: ${p._emplazamiento}<br>
+    ANCHO (cm): ${p._ancho_cm}
+  </p>
+  <div class="contenedor-youtube">
+    <iframe
+      width="100%" height="100%"
+      src="https://www.youtube.com/embed/${p.video_id}?autoplay=0&origin=${encodeURIComponent(location.origin)}"
+      title="Video 360"
+      frameborder="0"
+      allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; fullscreen"
+      allowfullscreen>
+    </iframe>
+  </div>
+`;
+
+    new maplibregl.Popup()
       .setLngLat(e.lngLat)
       .setMaxWidth("300px")
-      .setHTML(`
-      <strong>EJE: ${nombre}</strong>
-      <p>
-      COMUNA: ${comuna}<br>
-      LONGITUD (km): ${longitud}<br>
-      DIRECCIONALIDAD: ${direccionalidad}<br>
-      EMPLAZAMIENTO: ${emplazamiento}<br>
-      ANCHO (cm): ${ancho}<br>
-      <div class="contenedor-youtube"
-      allowfullscreen>
-        <iframe id="ytplayer" type="text/html" width="100%" height="100%"
-        src="https://www.youtube.com/embed/${videoID}?autoplay=0&origin=http://ignacioabe.cl"
-        frameborder="0"
-        allowfullscreen
-        />
-      </div>
-      </p>
-      `
-      )
+      .setHTML(html)
       .addTo(map);
   });
 
-  // Change the cursor to a pointer when
-  // the mouse is over the states layer.
+  // Cursor de puntero sobre la capa (se registra una sola vez)
   map.on('mouseenter', 'capa-tramos', () => {
     map.getCanvas().style.cursor = 'pointer';
   });
 
-  // Change the cursor back to a pointer
-  // when it leaves the states layer.
   map.on('mouseleave', 'capa-tramos', () => {
     map.getCanvas().style.cursor = '';
   });
 
-  colorSimple()
 
-});
+  function colorSimple() {
+    map.setPaintProperty('capa-tramos', 'line-color', "#EF6C00");
 
-
-function colorSimple() {
-  map.setPaintProperty('capa-tramos', 'line-color', "#EF6C00");
-
-  let leyendaSimple = `
+    let leyendaSimple = `
   <h5>SIMPLE</h5>
   <div><span style='background-color: #EF6C00'></span>ciclovías</div>
   `
 
-  //cambia contenido de leyenda
-  document.getElementById("leyenda-contenidos").innerHTML = leyendaSimple;
-};
+    //cambia contenido de leyenda
+    document.getElementById("leyenda-contenidos").innerHTML = leyendaSimple;
+  };
 
 
-function colorNorma() {
-  map.setPaintProperty('capa-tramos', 'line-color',
-    [
-      "match",
-      ["get", "_eval_graduada_pedal_clasif"],
-      ["buena"],
-      "#8BC34A",
-      ["regular"],
-      "#ffeb3b",
-      ["mala"],
-      "#ff9800",
-      ["muy mala"],
-      "#F44336",
-      "#000000"
-    ]
-  );
+  function colorNorma() {
+    map.setPaintProperty('capa-tramos', 'line-color',
+      [
+        "match",
+        ["get", "_eval_graduada_pedal_clasif"],
+        ["buena"],
+        "#8BC34A",
+        ["regular"],
+        "#ffeb3b",
+        ["mala"],
+        "#ff9800",
+        ["muy mala"],
+        "#F44336",
+        "#000000"
+      ]
+    );
 
-  let leyendaNormas = `
+    let leyendaNormas = `
   <h5>CUMPLIMIENTO NORMAS DE DISEÑO</h5>
   <div><span style='background-color: #8BC34A'></span>alto</div>
   <div><span style='background-color: #ffeb3b'></span>medio</div>
@@ -156,49 +149,50 @@ function colorNorma() {
   <div><span style='background-color: #F44336'></span>muy bajo</div>
   `
 
-  //cambia contenido de leyenda
-  document.getElementById("leyenda-contenidos").innerHTML = leyendaNormas;
+    //cambia contenido de leyenda
+    document.getElementById("leyenda-contenidos").innerHTML = leyendaNormas;
 
-};
+  };
 
-function colorEmplazamiento() {
-  map.setPaintProperty('capa-tramos', 'line-color',
-    [
-      "match",
-      ["get", "_emplazamiento"],
-      ["calzada"],
-      "#29B6F6",
-      ["parque"],
-      "#9CCC65",
-      "#EF5350"
-    ]
-  );
+  function colorEmplazamiento() {
+    map.setPaintProperty('capa-tramos', 'line-color',
+      [
+        "match",
+        ["get", "_emplazamiento"],
+        ["calzada"],
+        "#29B6F6",
+        ["parque"],
+        "#9CCC65",
+        "#EF5350"
+      ]
+    );
 
-  let leyendaEmplazamiento = `
+    let leyendaEmplazamiento = `
   <h5>EMPLAZAMIENTO</h5>
   <div><span style='background-color: #29B6F6'></span>por la calle</div>
   <div><span style='background-color: #9CCC65'></span>por un parque</div>
   <div><span style='background-color: #EF5350'></span>por la acera u otro lugar</div>
   `
 
-  //cambia contenido de leyenda
-  document.getElementById("leyenda-contenidos").innerHTML = leyendaEmplazamiento;
-};
+    //cambia contenido de leyenda
+    document.getElementById("leyenda-contenidos").innerHTML = leyendaEmplazamiento;
+  };
 
-document.getElementById("selector").onchange = changeListener;
+  document.getElementById("selector").onchange = changeListener;
 
-function changeListener() {
-  var value = this.value
-  console.log(value);
+  function changeListener() {
+    var value = this.value
+    console.log(value);
 
-  if (value == "simple") {
-    // document.body.style.background = "red";
-    colorSimple()
-  } else if (value == "normas") {
-    // document.body.style.background = "red";
-    colorNorma()
-  } else if (value == "emplazamiento") {
-    // document.body.style.background = "blue";
-    colorEmplazamiento()
+    if (value == "simple") {
+      colorSimple()
+    } else if (value == "normas") {
+      colorNorma()
+    } else if (value == "emplazamiento") {
+      colorEmplazamiento()
+    }
   }
-}
+
+  // estado inicial coherente con el selector
+  colorSimple();
+})

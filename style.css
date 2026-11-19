@@ -86,7 +86,7 @@
     width: 10px;
   }
 
-  .mapboxgl-popup {
+  .maplibregl-popup {
     width: 400px;
     max-width: 400px;
     font: 12px/20px 'Roboto Mono', sans-serif;
