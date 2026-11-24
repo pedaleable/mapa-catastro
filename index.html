@@ -22,32 +22,36 @@
 
     <div id="map"></div>
 
-<div id="botones">
+    <div id="botones">
 
-    
-    <button id="boton-leyenda" onclick="ocultaLeyenda()">VER/OCULTAR LEYENDA</button>
-    <h4 class="flotante">visualización</h4>
-    <div id="selector-estilo">
-        <!-- <h>Would you like to see count values per hour or minute?</h><br> -->
-        <select id="selector">
-            <option value="simple" selected>simple</option>
-            <option value="normas">cumplimiento normas</option>
-            <option value="emplazamiento" >emplazamiento</option>
-        </select>
+
+        <button id="boton-leyenda">VER/OCULTAR LEYENDA</button>
+        <h4 class="flotante">visualización</h4>
+        <div id="selector-estilo">
+            <!-- <h>Would you like to see count values per hour or minute?</h><br> -->
+            <select id="selector">
+                <option value="simple" selected>simple</option>
+                <option value="normas">cumplimiento normas</option>
+                <option value="emplazamiento">emplazamiento</option>
+                <option value="período">período</option>
+            </select>
+        </div>
     </div>
-</div>
 
     <div id='state-legend' class='leyenda'>
         <h4>LEYENDA</h4>
         <div id="leyenda-contenidos"></div>
         <div id="leyenda-creditos">
             <p>
-                Este mapa es un proyecto de <a href="https://pedaleable.org">Pedaleable.org</a>, y ha sido creado a partir de un recorrido exhaustivo de la red de ciclovías de Santiago, registrando los principales parámetros de diseño y un video en 360 grados para cada eje. Contó con el apoyo de Specialized y Garmin. Para más información <a href="https://www.pedaleable.org/2022/09/21/mapa/">haz click aquí.</a>
+                Este mapa es un proyecto de <a href="https://pedaleable.org">Pedaleable.org</a>, y ha sido creado a
+                partir de un recorrido exhaustivo de la red de ciclovías de Santiago, registrando los principales
+                parámetros de diseño y un video en 360 grados para cada eje. Contó con el apoyo de Specialized y Garmin.
+                Para más información <a href="https://www.pedaleable.org/2022/09/21/mapa/">haz click aquí.</a>
             </p>
         </div>
     </div>
 
-  <script type="module" , src="map.js"></script>
+    <script type="module" , src="map.js"></script>
 
 </body>
 

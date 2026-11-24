@@ -1,6 +1,6 @@
 import * as maplibregl from 'https://unpkg.com/maplibre-gl@6.19.0/dist/maplibre-gl.mjs';
 
-
+document.getElementById("boton-leyenda").addEventListener("click", ocultaLeyenda);
 function ocultaLeyenda() {
   var x = document.getElementById("state-legend");
   if (x.style.display === "none") {
@@ -42,7 +42,7 @@ map.on("load", () => {
   //añade fuente tramos
   map.addSource('fuente-catastro', {
     'type': 'geojson',
-    'data': 'datos/catastro.geojson',
+    'data': 'datos/catastro-2025.geojson',
   });
 
 
@@ -123,7 +123,6 @@ map.on("load", () => {
     document.getElementById("leyenda-contenidos").innerHTML = leyendaSimple;
   };
 
-
   function colorNorma() {
     map.setPaintProperty('capa-tramos', 'line-color',
       [
@@ -178,6 +177,24 @@ map.on("load", () => {
     document.getElementById("leyenda-contenidos").innerHTML = leyendaEmplazamiento;
   };
 
+function colorPeríodo() {
+  map.setPaintProperty('capa-tramos', 'line-color', [
+    "case",
+    ["==", ["get", "_nueva"], true],  "#43A047",
+    ["==", ["get", "_nueva"], false], "#FB8C00",
+    "#ef50ea" // valor por defecto (null, ausente, otro tipo)
+  ]);
+
+    let leyendaPeríodo = `
+  <h5>EMPLAZAMIENTO</h5>
+  <div><span style='background-color: #FB8C00'></span>2021 o posterior</div>
+  <div><span style='background-color: #43A047'></span>2022 al presente</div>
+  `
+
+    //cambia contenido de leyenda
+    document.getElementById("leyenda-contenidos").innerHTML = leyendaPeríodo;
+  };
+
   document.getElementById("selector").onchange = changeListener;
 
   function changeListener() {
@@ -190,6 +207,8 @@ map.on("load", () => {
       colorNorma()
     } else if (value == "emplazamiento") {
       colorEmplazamiento()
+    } else if (value == "período") {
+      colorPeríodo()
     }
   }
 
