@@ -177,22 +177,33 @@ map.on("load", () => {
     document.getElementById("leyenda-contenidos").innerHTML = leyendaEmplazamiento;
   };
 
-function colorPeríodo() {
-  map.setPaintProperty('capa-tramos', 'line-color', [
-    "case",
-    ["==", ["get", "_nueva"], true],  "#43A047",
-    ["==", ["get", "_nueva"], false], "#FB8C00",
-    "#ef50ea" // valor por defecto (null, ausente, otro tipo)
-  ]);
+function colorAñoConstrucción() {
+  map.setPaintProperty('capa-tramos', 'line-color',
+    [
+      "step",
+      ["get", "año"],
+      "#BDBDBD",       // < 1995 o sin dato: gris
+      1995, "#F0F921", // 1995–1999: amarillo
+      2000, "#FCA636", // 2000–2004: naranja
+      2005, "#E16462", // 2005–2009: coral
+      2010, "#B12A90", // 2010–2014: magenta
+      2015, "#6A00A8", // 2015–2019: violeta
+      2020, "#0D0887"  // 2020–2025: violeta oscuro/índigo
+    ]
+  );
 
-    let leyendaPeríodo = `
+    let leyendaAñoConstrucción = `
   <h5>EMPLAZAMIENTO</h5>
-  <div><span style='background-color: #FB8C00'></span>2021 o posterior</div>
-  <div><span style='background-color: #43A047'></span>2022 al presente</div>
+  <div><span style='background-color: #F0F921'></span>1995–1999</div>
+  <div><span style='background-color: #FCA636'></span>2000–2004</div>
+  <div><span style='background-color: #E16462'></span>2005–2009</div>
+  <div><span style='background-color: #B12A90'></span>2010–2014</div>
+  <div><span style='background-color: #6A00A8'></span>2015–2019</div>
+  <div><span style='background-color: #0D0887'></span>2020–2025</div>
   `
 
     //cambia contenido de leyenda
-    document.getElementById("leyenda-contenidos").innerHTML = leyendaPeríodo;
+    document.getElementById("leyenda-contenidos").innerHTML = leyendaAñoConstrucción;
   };
 
   document.getElementById("selector").onchange = changeListener;
@@ -207,8 +218,8 @@ function colorPeríodo() {
       colorNorma()
     } else if (value == "emplazamiento") {
       colorEmplazamiento()
-    } else if (value == "período") {
-      colorPeríodo()
+    } else if (value == "año_construcción") {
+      colorAñoConstrucción()
     }
   }
 
