@@ -42,7 +42,7 @@ map.on("load", () => {
   //añade fuente tramos
   map.addSource('fuente-catastro', {
     'type': 'geojson',
-    'data': 'datos/catastro-2025.geojson',
+    'data': 'datos/catastro-nuevo.geojson',
   });
 
 
