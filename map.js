@@ -42,7 +42,8 @@ map.on("load", () => {
   //añade fuente tramos
   map.addSource('fuente-catastro', {
     'type': 'geojson',
-    'data': 'datos/catastro-nuevo.geojson',
+    // 'data': 'datos/catastro-nuevo.geojson',
+    'data': 'https://geodatos-pub.s3.us-east-1.amazonaws.com/catastro.geojson',
     'generateId': true
   });
 
