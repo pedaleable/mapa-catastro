@@ -43,6 +43,7 @@ map.on("load", () => {
   map.addSource('fuente-catastro', {
     'type': 'geojson',
     'data': 'datos/catastro-nuevo.geojson',
+    'generateId': true
   });
 
 
@@ -69,47 +70,94 @@ map.on("load", () => {
     }
   });
 
-  // popup al hacer clic en un tramo
-  map.on('click', 'capa-tramos', (e) => {
-    const p = e.features[0].properties;
+  // capas de resalte (se insertan debajo de capa-tramos, como un halo)
+  const anchoResalte = ["interpolate", ["linear"], ["zoom"], 12, 6, 15, 12];
+
+  // hover
+  map.addLayer({
+    id: "capa-tramos-hover",
+    type: "line",
+    source: "fuente-catastro",
+    filter: ["==", ["id"], -1],
+    layout: { "line-cap": "round", "line-join": "round" },
+    paint: { "line-color": "#000000", "line-width": anchoResalte, "line-opacity": 0.35 }
+  }, "capa-tramos");
+
+  // seleccionado (clic)
+  map.addLayer({
+    id: "capa-tramos-seleccion",
+    type: "line",
+    source: "fuente-catastro",
+    filter: ["==", ["id"], -1],
+    layout: { "line-cap": "round", "line-join": "round" },
+    paint: { "line-color": "#1565C0", "line-width": anchoResalte, "line-opacity": 0.9 }
+  }, "capa-tramos");
+
+  let idSeleccionado = null;
+
+  const resaltar = (capa, id) =>
+    map.setFilter(capa, ["==", ["id"], id ?? -1]);
+
+  // hover
+  map.on("mousemove", "capa-tramos", (e) => {
+    map.getCanvas().style.cursor = "pointer";
+    resaltar("capa-tramos-hover", e.features[0].id);
+  });
+
+  map.on("mouseleave", "capa-tramos", () => {
+    map.getCanvas().style.cursor = "";
+    resaltar("capa-tramos-hover", null);
+  });
+
+  // clic
+  map.on("click", "capa-tramos", (e) => {
+    const f = e.features[0];
+    const p = f.properties;
+    const id = f.id;
+
+    idSeleccionado = id;
+    resaltar("capa-tramos-seleccion", id);
 
     const html = `
   <strong>EJE: ${p.nombre}</strong>
   <p>
     COMUNA: ${p._comuna}<br>
-    LONGITUD (km): ${p.km}<br>
+    LONGITUD (km): ${p.largo_km.toFixed(2)}<br>
     DIRECCIONALIDAD: ${p._tipo}<br>
     EMPLAZAMIENTO: ${p._emplazamiento}<br>
     ANCHO (cm): ${p._ancho_cm}
   </p>
+  <!-- 
   <div class="contenedor-youtube">
-    <iframe
-      width="100%" height="100%"
-      src="https://www.youtube.com/embed/${p.video_id}?autoplay=0&origin=${encodeURIComponent(location.origin)}"
-      title="Video 360"
-      frameborder="0"
-      allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; fullscreen"
-      allowfullscreen>
-    </iframe>
+  <iframe
+  width="100%" height="100%"
+  src="https://www.youtube.com/embed/${p.video_id}?autoplay=0&origin=${encodeURIComponent(location.origin)}"
+  title="Video 360"
+  frameborder="0"
+  allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; fullscreen"
+  allowfullscreen>
+  </iframe>
   </div>
+  -->
 `;
 
-    new maplibregl.Popup()
+    const popup = new maplibregl.Popup()
       .setLngLat(e.lngLat)
       .setMaxWidth("300px")
       .setHTML(html)
       .addTo(map);
+
+    // al cerrar el popup se quita la selección (solo si sigue siendo este tramo)
+    popup.on("close", () => {
+      if (idSeleccionado === id) {
+        idSeleccionado = null;
+        resaltar("capa-tramos-seleccion", null);
+      }
+    });
   });
 
-  // Cursor de puntero sobre la capa (se registra una sola vez)
-  map.on('mouseenter', 'capa-tramos', () => {
-    map.getCanvas().style.cursor = 'pointer';
-  });
 
-  map.on('mouseleave', 'capa-tramos', () => {
-    map.getCanvas().style.cursor = '';
-  });
-
+  // estilos de color
 
   function colorSimple() {
     map.setPaintProperty('capa-tramos', 'line-color', "#EF6C00");
@@ -122,6 +170,7 @@ map.on("load", () => {
     //cambia contenido de leyenda
     document.getElementById("leyenda-contenidos").innerHTML = leyendaSimple;
   };
+
 
   function colorNorma() {
     map.setPaintProperty('capa-tramos', 'line-color',
@@ -150,8 +199,8 @@ map.on("load", () => {
 
     //cambia contenido de leyenda
     document.getElementById("leyenda-contenidos").innerHTML = leyendaNormas;
-
   };
+
 
   function colorEmplazamiento() {
     map.setPaintProperty('capa-tramos', 'line-color',
@@ -177,23 +226,24 @@ map.on("load", () => {
     document.getElementById("leyenda-contenidos").innerHTML = leyendaEmplazamiento;
   };
 
-function colorAñoConstrucción() {
-  map.setPaintProperty('capa-tramos', 'line-color',
-    [
-      "step",
-      ["get", "año"],
-      "#BDBDBD",       // < 1995 o sin dato: gris
-      1995, "#F0F921", // 1995–1999: amarillo
-      2000, "#FCA636", // 2000–2004: naranja
-      2005, "#E16462", // 2005–2009: coral
-      2010, "#B12A90", // 2010–2014: magenta
-      2015, "#6A00A8", // 2015–2019: violeta
-      2020, "#0D0887"  // 2020–2025: violeta oscuro/índigo
-    ]
-  );
+
+  function colorAñoConstrucción() {
+    map.setPaintProperty('capa-tramos', 'line-color',
+      [
+        "step",
+        ["to-number", ["get", "año"], 0], // sin dato o no numérico => 0 => gris
+        "#BDBDBD",       // < 1995 o sin dato: gris
+        1995, "#F0F921", // 1995–1999: amarillo
+        2000, "#FCA636", // 2000–2004: naranja
+        2005, "#E16462", // 2005–2009: coral
+        2010, "#B12A90", // 2010–2014: magenta
+        2015, "#6A00A8", // 2015–2019: violeta
+        2020, "#0D0887"  // 2020–2025: violeta oscuro/índigo
+      ]
+    );
 
     let leyendaAñoConstrucción = `
-  <h5>EMPLAZAMIENTO</h5>
+  <h5>AÑO DE CONSTRUCCIÓN</h5>
   <div><span style='background-color: #F0F921'></span>1995–1999</div>
   <div><span style='background-color: #FCA636'></span>2000–2004</div>
   <div><span style='background-color: #E16462'></span>2005–2009</div>
@@ -206,20 +256,23 @@ function colorAñoConstrucción() {
     document.getElementById("leyenda-contenidos").innerHTML = leyendaAñoConstrucción;
   };
 
+
+  // selector de estilo
+  const estilos = {
+    simple: colorSimple,
+    normas: colorNorma,
+    emplazamiento: colorEmplazamiento,
+    "año_construcción": colorAñoConstrucción
+  };
+
   document.getElementById("selector").onchange = changeListener;
 
   function changeListener() {
-    var value = this.value
-    console.log(value);
-
-    if (value == "simple") {
-      colorSimple()
-    } else if (value == "normas") {
-      colorNorma()
-    } else if (value == "emplazamiento") {
-      colorEmplazamiento()
-    } else if (value == "año_construcción") {
-      colorAñoConstrucción()
+    const fn = estilos[this.value];
+    if (fn) {
+      fn();
+    } else {
+      console.warn(`Estilo no implementado: ${this.value}`);
     }
   }
 
